@@ -25,7 +25,7 @@ def check_pass():
         else:
             special += special
 
-    if length == 1:
+    if length >= 8:
         strength += 1
     else:
         feedback.append(
