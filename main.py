@@ -1,10 +1,19 @@
 import string
 import getpass
 import re
+import hashlib
+
+
+def hash_pass(pwd):
+    hashed = hashlib.sha256(pwd.encode()).hexdigest()
+    return hashed
 
 
 def check_pass():
     pwd = getpass.getpass("enter your password")
+    hashed_pwd = hash_pass(pwd)
+    print(f"your hashed password is :{hashed_pwd}\n")
+
     strength = 0
     feedback = []
     remarks = ""
@@ -23,7 +32,7 @@ def check_pass():
         elif char in string.digits:
             degit += 1
         else:
-            special += special
+            special += 1
 
     if length >= 8:
         strength += 1
