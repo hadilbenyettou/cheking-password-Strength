@@ -1,17 +1,25 @@
 import string
 import getpass
-import re
 import hashlib
+import os
 
 
-def hash_pass(pwd):
-    hashed = hashlib.sha256(pwd.encode()).hexdigest()
+def generate_salt():
+    return os.urandom(15)
+
+
+def hash_pass(pwd, salt, iteration=100000):
+    hashed = hashlib.sha256(pwd.encode() + salt).hexdigest()
+    for _ in range(iteration):
+        hashed = hashlib.sha256(hashed.encode() + salt).hexdigest()
+
     return hashed
 
 
 def check_pass():
+    salt = generate_salt()
     pwd = getpass.getpass("enter your password")
-    hashed_pwd = hash_pass(pwd)
+    hashed_pwd = hash_pass(pwd, salt)
     print(f"your hashed password is :{hashed_pwd}\n")
 
     strength = 0
@@ -74,6 +82,11 @@ def check_pass():
     print(f"{degit} digit")
     print(f"{special} special chaachters")
     print(f"PS: {remarks} ")
+
+    if feedback:
+        print("Additional feedback:")
+        for msg in feedback:
+            print(msg)
 
 
 check_pass()
